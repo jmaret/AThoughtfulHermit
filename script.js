@@ -121,6 +121,14 @@ function renderStrip() {
       button.setAttribute('aria-label', `Focus chronicle: ${piece.title}`);
       button.dataset.index = String(absoluteIndex);
 
+      const logo = document.createElement('img');
+      logo.className = 'panel-logo';
+      logo.src = 'images/TransparentMasterLogo.png';
+      logo.alt = '';
+      logo.setAttribute('aria-hidden', 'true');
+      logo.width = 52;
+      logo.height = 52;
+
       const heading = document.createElement('h3');
       heading.textContent = piece.title;
 
@@ -131,7 +139,7 @@ function renderStrip() {
       series.className = 'strip-series';
       series.textContent = piece.series;
 
-      button.append(heading, excerpt, series);
+      button.append(logo, heading, excerpt, series);
       return button;
     })
   );
