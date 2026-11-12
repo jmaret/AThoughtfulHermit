@@ -109,10 +109,33 @@ button {
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: clamp(1.4rem, 3vw, 2.4rem);
+  padding-right: clamp(5.5rem, 12vw, 7.5rem);
+  padding-bottom: clamp(5rem, 10vw, 6.5rem);
   border-top: 6px solid var(--wood);
   backdrop-filter: blur(6px);
   animation: riseIn 0.95s ease 0.08s both;
   min-height: 18rem;
+}
+
+.panel-logo {
+  position: absolute;
+  bottom: 0.85rem;
+  right: 0.85rem;
+  top: auto;
+  width: 88px;
+  height: 88px;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+  z-index: 1;
+}
+
+.strip-card .panel-logo {
+  bottom: 0.55rem;
+  right: 0.55rem;
+  top: auto;
+  width: 52px;
+  height: 52px;
 }
 
 .feature-panel.is-swapping {
@@ -233,12 +256,15 @@ button {
 }
 
 .strip-card {
+  position: relative;
   appearance: none;
   text-align: left;
   border: 1px solid rgba(61, 42, 26, 0.18);
   background: rgba(252, 246, 236, 0.88);
   border-radius: 14px;
   padding: 1rem 1.05rem 1.1rem;
+  padding-right: 4rem;
+  padding-bottom: 3.6rem;
   border-top: 5px solid var(--wood);
   box-shadow: 0 10px 24px rgba(18, 12, 8, 0.18);
   color: inherit;
@@ -432,6 +458,27 @@ button {
   .author-portrait {
     width: 80px;
     height: 80px;
+  }
+
+  .panel-logo {
+    width: 64px;
+    height: 64px;
+    bottom: 0.65rem;
+    right: 0.65rem;
+    top: auto;
+  }
+
+  .feature-panel {
+    padding-right: 5rem;
+    padding-bottom: 5rem;
+  }
+
+  .strip-card .panel-logo {
+    width: 44px;
+    height: 44px;
+    bottom: 0.45rem;
+    right: 0.45rem;
+    top: auto;
   }
 
   .strip-track {
