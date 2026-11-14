@@ -1,0 +1,28 @@
+name: Weekly article email
+
+on:
+  schedule:
+    # Mondays 15:00 UTC
+    - cron: '0 15 * * 1'
+  workflow_dispatch:
+
+jobs:
+  send-weekly:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Invoke send-weekly Edge Function
+        env:
+          SUPABASE_FUNCTIONS_URL: ${{ secrets.SUPABASE_FUNCTIONS_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          set -euo pipefail
+          if [ -z "${SUPABASE_FUNCTIONS_URL:-}" ] || [ -z "${CRON_SECRET:-}" ]; then
+            echo "Missing SUPABASE_FUNCTIONS_URL or CRON_SECRET secrets."
+            exit 1
+          fi
+          curl -fsS -X POST "${SUPABASE_FUNCTIONS_URL}/send-weekly" \
+            -H "Content-Type: application/json" \
+            -H "x-cron-secret: ${CRON_SECRET}" \
+            -H "Authorization: Bearer ${SUPABASE_ANON_KEY}" \
+            -H "apikey: ${SUPABASE_ANON_KEY}"

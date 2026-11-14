@@ -1,0 +1,28 @@
+# Linked project: AThoughtfulHermit (fcfeesigrxqpbvlgqguh)
+# Browser calls these with the anon/publishable key (no user JWT session).
+
+project_id = "fcfeesigrxqpbvlgqguh"
+
+[api]
+enabled = true
+
+[functions.subscribe]
+verify_jwt = false
+
+[functions.confirm]
+verify_jwt = false
+
+[functions.unsubscribe]
+verify_jwt = false
+
+[functions.send-article-now]
+verify_jwt = false
+
+[functions.send-weekly]
+verify_jwt = false
+
+[functions.react]
+verify_jwt = false
+
+[functions.reaction-counts]
+verify_jwt = false
