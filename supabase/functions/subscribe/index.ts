@@ -1,8 +1,17 @@
 import { corsHeaders, jsonResponse } from '../_shared/cors.ts';
 import { adminClient } from '../_shared/supabase.ts';
 import { functionsBaseUrl, sendResendEmail, simpleNoticeEmailHtml } from '../_shared/email.ts';
+import {
+  RateLimitError,
+  assertWithinLimit,
+  clientIp,
+  recordRateEvent,
+} from '../_shared/rateLimit.ts';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const MAX_PER_EMAIL_HOUR = 3;
+const MAX_PER_IP_HOUR = 10;
+const HOUR_MS = 60 * 60 * 1000;
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -22,6 +31,18 @@ Deno.serve(async (req) => {
     }
 
     const supabase = adminClient();
+    const ip = clientIp(req);
+
+    try {
+      await assertWithinLimit(supabase, `subscribe:email:${normalized}`, MAX_PER_EMAIL_HOUR, HOUR_MS);
+      await assertWithinLimit(supabase, `subscribe:ip:${ip}`, MAX_PER_IP_HOUR, HOUR_MS);
+    } catch (error) {
+      if (error instanceof RateLimitError) {
+        return jsonResponse({ error: error.message }, 429);
+      }
+      throw error;
+    }
+
     const { data: existing } = await supabase
       .from('subscribers')
       .select('*')
@@ -29,7 +50,6 @@ Deno.serve(async (req) => {
       .maybeSingle();
 
     let confirmToken = existing?.confirm_token as string | undefined;
-    let unsubscribeToken = existing?.unsubscribe_token as string | undefined;
 
     if (existing?.status === 'active') {
       return jsonResponse({ ok: true, status: 'active', message: 'You are already subscribed.' });
@@ -44,7 +64,6 @@ Deno.serve(async (req) => {
         .single();
       if (error) throw error;
       confirmToken = data.confirm_token;
-      unsubscribeToken = data.unsubscribe_token;
     } else {
       const { data, error } = await supabase
         .from('subscribers')
@@ -53,7 +72,6 @@ Deno.serve(async (req) => {
         .single();
       if (error) throw error;
       confirmToken = data.confirm_token;
-      unsubscribeToken = data.unsubscribe_token;
     }
 
     const confirmUrl = `${functionsBaseUrl()}/confirm?token=${confirmToken}`;
@@ -73,11 +91,13 @@ Deno.serve(async (req) => {
       return jsonResponse({ error: sent.error }, 502);
     }
 
+    await recordRateEvent(supabase, `subscribe:email:${normalized}`);
+    await recordRateEvent(supabase, `subscribe:ip:${ip}`);
+
     return jsonResponse({
       ok: true,
       status: 'pending',
       message: 'Check your email to confirm your subscription.',
-      unsubscribeToken,
     });
   } catch (error) {
     return jsonResponse({ error: error instanceof Error ? error.message : 'Subscribe failed' }, 500);

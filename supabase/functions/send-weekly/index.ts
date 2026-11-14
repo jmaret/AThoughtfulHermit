@@ -47,7 +47,6 @@ Deno.serve(async (req) => {
 
     for (const subscriber of list) {
       const unsub = `${functionsBaseUrl()}/unsubscribe?token=${subscriber.unsubscribe_token}`;
-      // Append unsubscribe if the stored HTML did not already include a personalized link.
       const html = String(edition.email_html).includes('Unsubscribe')
         ? edition.email_html
         : `${edition.email_html}<p style="text-align:center;font-family:Georgia,serif;font-size:12px;"><a href="${unsub}">Unsubscribe</a></p>`;
@@ -64,18 +63,26 @@ Deno.serve(async (req) => {
       }
     }
 
-    await supabase
-      .from('weekly_editions')
-      .update({ sent_at: new Date().toISOString() })
-      .eq('id', edition.id);
+    // Only mark complete when every active subscriber received the email.
+    if (sent > 0 && failures.length === 0) {
+      await supabase
+        .from('weekly_editions')
+        .update({ sent_at: new Date().toISOString() })
+        .eq('id', edition.id);
+    }
 
     return jsonResponse({
-      ok: true,
+      ok: failures.length === 0,
       editionId: edition.id,
       sent,
       failed: failures.length,
+      markedSent: sent > 0 && failures.length === 0,
       failures: failures.slice(0, 10),
-    });
+      message:
+        failures.length === 0
+          ? 'Weekly edition sent.'
+          : 'Partial or total send failure; edition left unsent for retry.',
+    }, failures.length === 0 ? 200 : 502);
   } catch (error) {
     return jsonResponse({ error: error instanceof Error ? error.message : 'Weekly send failed' }, 500);
   }

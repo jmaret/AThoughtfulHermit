@@ -125,6 +125,10 @@
       : null;
   }
 
+  function stillFocused(chronicleId) {
+    return currentChronicle()?.id === chronicleId;
+  }
+
   async function refreshCounts(chronicleId) {
     setStatus(reactionStatus, '');
     if (!chronicleId) {
@@ -132,6 +136,7 @@
     }
 
     if (!functionsBase()) {
+      if (!stillFocused(chronicleId)) return;
       const local = localCountsFor(chronicleId);
       applyVoteUi(local.likes, local.dislikes, local.mine);
       return;
@@ -141,10 +146,12 @@
       const payload = await callFunction('reaction-counts', {
         query: { chronicleId },
       });
+      if (!stillFocused(chronicleId)) return;
       const row = payload.counts?.[chronicleId] || { likes: 0, dislikes: 0 };
       const mine = localCountsFor(chronicleId).mine;
       applyVoteUi(row.likes, row.dislikes, mine);
     } catch {
+      if (!stillFocused(chronicleId)) return;
       const local = localCountsFor(chronicleId);
       applyVoteUi(local.likes, local.dislikes, local.mine);
     }
@@ -177,16 +184,18 @@
   async function castVote(vote) {
     const piece = currentChronicle();
     if (!piece) return;
+    const chronicleId = piece.id;
     setStatus(reactionStatus, '');
 
     // Always remember this browser's choice locally so the header is never used for vote errors.
     const votes = readLocalVotes();
-    votes[piece.id] = votes[piece.id] || {};
-    votes[piece.id][getVisitorKey()] = vote;
+    votes[chronicleId] = votes[chronicleId] || {};
+    votes[chronicleId][getVisitorKey()] = vote;
     writeLocalVotes(votes);
 
     if (!functionsBase()) {
-      const local = localCountsFor(piece.id);
+      if (!stillFocused(chronicleId)) return;
+      const local = localCountsFor(chronicleId);
       applyVoteUi(local.likes, local.dislikes, vote);
       return;
     }
@@ -195,14 +204,16 @@
       const payload = await callFunction('react', {
         method: 'POST',
         body: {
-          chronicleId: piece.id,
+          chronicleId,
           visitorKey: getVisitorKey(),
           vote,
         },
       });
+      if (!stillFocused(chronicleId)) return;
       applyVoteUi(payload.likes ?? 0, payload.dislikes ?? 0, payload.vote);
     } catch (error) {
-      const local = localCountsFor(piece.id);
+      if (!stillFocused(chronicleId)) return;
+      const local = localCountsFor(chronicleId);
       applyVoteUi(local.likes, local.dislikes, vote);
       setStatus(reactionStatus, error.message, 'error');
     }
@@ -238,12 +249,7 @@
         method: 'POST',
         body: {
           email: sendEmail.value,
-          chronicle: {
-            id: piece.id,
-            title: piece.title,
-            series: piece.series,
-            excerpts: piece.excerpts,
-          },
+          chronicleId: piece.id,
         },
       });
       setStatus(sendStatus, payload.message || 'Article sent.', 'success');

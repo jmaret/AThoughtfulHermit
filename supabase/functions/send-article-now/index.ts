@@ -1,20 +1,22 @@
 import { corsHeaders, jsonResponse } from '../_shared/cors.ts';
 import { adminClient } from '../_shared/supabase.ts';
+import { findChronicle } from '../_shared/chronicles.ts';
 import {
   articleEmailHtml,
   functionsBaseUrl,
   sendResendEmail,
 } from '../_shared/email.ts';
+import {
+  RateLimitError,
+  assertWithinLimit,
+  clientIp,
+  recordRateEvent,
+} from '../_shared/rateLimit.ts';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const MAX_PER_HOUR = 3;
-
-type ChroniclePayload = {
-  id: string;
-  title: string;
-  series: string;
-  excerpts: string[];
-};
+const MAX_PER_EMAIL_HOUR = 3;
+const MAX_PER_IP_HOUR = 10;
+const HOUR_MS = 60 * 60 * 1000;
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -29,25 +31,28 @@ Deno.serve(async (req) => {
     const email = String(body.email || '')
       .trim()
       .toLowerCase();
-    const chronicle = body.chronicle as ChroniclePayload | undefined;
+    const chronicleId = String(body.chronicleId || body.chronicle?.id || '').trim();
 
     if (!EMAIL_RE.test(email)) {
       return jsonResponse({ error: 'Enter a valid email address.' }, 400);
     }
-    if (!chronicle?.id || !chronicle.title || !Array.isArray(chronicle.excerpts)) {
-      return jsonResponse({ error: 'Missing chronicle payload.' }, 400);
+
+    const chronicle = findChronicle(chronicleId);
+    if (!chronicle) {
+      return jsonResponse({ error: 'Unknown chronicle.' }, 400);
     }
 
     const supabase = adminClient();
-    const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
-    const { count } = await supabase
-      .from('send_rate_limits')
-      .select('*', { count: 'exact', head: true })
-      .eq('email', email)
-      .gte('sent_at', oneHourAgo);
+    const ip = clientIp(req);
 
-    if ((count ?? 0) >= MAX_PER_HOUR) {
-      return jsonResponse({ error: 'Rate limit reached. Try again later.' }, 429);
+    try {
+      await assertWithinLimit(supabase, `send-now:email:${email}`, MAX_PER_EMAIL_HOUR, HOUR_MS);
+      await assertWithinLimit(supabase, `send-now:ip:${ip}`, MAX_PER_IP_HOUR, HOUR_MS);
+    } catch (error) {
+      if (error instanceof RateLimitError) {
+        return jsonResponse({ error: error.message }, 429);
+      }
+      throw error;
     }
 
     let unsubscribeUrl: string | undefined;
@@ -62,7 +67,7 @@ Deno.serve(async (req) => {
 
     const html = articleEmailHtml({
       title: chronicle.title,
-      series: chronicle.series || 'Chronicle',
+      series: chronicle.series,
       excerpts: chronicle.excerpts,
       unsubscribeUrl,
     });
@@ -76,7 +81,8 @@ Deno.serve(async (req) => {
       return jsonResponse({ error: sent.error }, 502);
     }
 
-    await supabase.from('send_rate_limits').insert({ email });
+    await recordRateEvent(supabase, `send-now:email:${email}`);
+    await recordRateEvent(supabase, `send-now:ip:${ip}`);
 
     return jsonResponse({ ok: true, message: 'Article sent.' });
   } catch (error) {

@@ -21,7 +21,7 @@ jobs:
             echo "Missing SUPABASE_FUNCTIONS_URL or CRON_SECRET secrets."
             exit 1
           fi
-          curl -sS -X POST "${SUPABASE_FUNCTIONS_URL}/send-weekly" \
+          curl -fsS -X POST "${SUPABASE_FUNCTIONS_URL}/send-weekly" \
             -H "Content-Type: application/json" \
             -H "x-cron-secret: ${CRON_SECRET}" \
             -H "Authorization: Bearer ${SUPABASE_ANON_KEY}" \

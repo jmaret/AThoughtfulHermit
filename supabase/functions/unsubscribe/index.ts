@@ -1,6 +1,6 @@
 import { corsHeaders, htmlResponse, jsonResponse } from '../_shared/cors.ts';
 import { adminClient } from '../_shared/supabase.ts';
-import { siteUrl } from '../_shared/email.ts';
+import { escapeHtml, siteUrl } from '../_shared/email.ts';
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -35,14 +35,17 @@ Deno.serve(async (req) => {
       return jsonResponse({ ok: true });
     }
 
+    const redirect = `${siteUrl()}/?unsubscribed=1`;
     return htmlResponse(`<!DOCTYPE html>
-<html><head><meta charset="utf-8" /><title>Unsubscribed</title></head>
+<html><head><meta charset="utf-8" /><meta http-equiv="refresh" content="0;url=${escapeHtml(redirect)}" />
+<title>Unsubscribed</title></head>
 <body style="font-family:Georgia,serif;background:#1c1612;color:#fcf6ec;padding:40px;text-align:center;">
   <h1>You are unsubscribed</h1>
   <p>No more weekly emails will be sent to this address.</p>
-  <p><a href="${siteUrl()}/" style="color:#d4a04a;">Return to AThoughtfulHermit</a></p>
+  <p><a href="${escapeHtml(redirect)}" style="color:#d4a04a;">Return to AThoughtfulHermit</a></p>
 </body></html>`);
   } catch (error) {
-    return htmlResponse(`<h1>Unsubscribe failed</h1><p>${error instanceof Error ? error.message : 'Error'}</p>`, 500);
+    const message = escapeHtml(error instanceof Error ? error.message : 'Error');
+    return htmlResponse(`<h1>Unsubscribe failed</h1><p>${message}</p>`, 500);
   }
 });
