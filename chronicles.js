@@ -12,6 +12,7 @@ const CHRONICLES = [
     essayId: 'essay-geography-distance',
     cartoonSrc: 'images/cartoon_rc_09.png',
     accent: '#3d6b8c',
+    isArticleOfTheWeek: true,
   },
   {
     id: 'peaks-valleys',

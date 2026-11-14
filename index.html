@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=1.2" />
+  <link rel="stylesheet" href="style.css?v=1.7" />
 </head>
 <body>
   <div class="site-shell">
@@ -24,6 +24,21 @@
         <h1>AThoughtfulHermit</h1>
         <p class="brand-tagline">Thoughts and ideas from the quiet edge of the map—reflective chronicles on closeness, time, and becoming.</p>
       </div>
+      <form class="subscribe-form" id="subscribe-form">
+        <label class="subscribe-label" for="subscribe-email">Weekly article of the week</label>
+        <div class="subscribe-row">
+          <input
+            id="subscribe-email"
+            name="email"
+            type="email"
+            required
+            autocomplete="email"
+            placeholder="you@example.com"
+          />
+          <button class="action-button action-button--solid" type="submit">Subscribe</button>
+        </div>
+        <p class="engagement-status" id="subscribe-status" hidden></p>
+      </form>
     </header>
 
     <section class="feature-panel" id="feature-panel" aria-live="polite">
@@ -41,7 +56,33 @@
       <div class="feature-actions">
         <button class="action-button" type="button" id="feature-essay">Essay</button>
         <button class="action-button" type="button" id="feature-cartoon">View cartoon</button>
+        <button class="action-button" type="button" id="feature-send-now">Send this article now</button>
       </div>
+      <div class="reaction-row" aria-label="Article reactions">
+        <button
+          class="reaction-button"
+          type="button"
+          id="feature-like"
+          aria-pressed="false"
+          aria-label="Thumbs up"
+          title="Thumbs up"
+        >
+          <span class="reaction-emoji" aria-hidden="true">👍</span>
+          <span id="like-count">0</span>
+        </button>
+        <button
+          class="reaction-button"
+          type="button"
+          id="feature-dislike"
+          aria-pressed="false"
+          aria-label="Thumbs down"
+          title="Thumbs down"
+        >
+          <span class="reaction-emoji" aria-hidden="true">👎</span>
+          <span id="dislike-count">0</span>
+        </button>
+      </div>
+      <p class="engagement-status reaction-status" id="reaction-status" hidden></p>
     </section>
 
     <section class="strip-section" aria-label="Chronicle strip">
@@ -1540,7 +1581,24 @@
     </div>
   </div>
 
-  <script src="chronicles.js?v=1.1"></script>
-  <script src="script.js?v=1.1"></script>
+  <div class="send-modal" id="send-modal" hidden aria-hidden="true" role="dialog" aria-modal="true" aria-label="Send this article now">
+    <button class="send-modal__backdrop" type="button" aria-label="Close dialog" data-send-close></button>
+    <div class="send-modal__panel">
+      <button class="send-modal__close" type="button" aria-label="Close" data-send-close>&times;</button>
+      <h2 class="send-modal__title">Send this article now</h2>
+      <p class="send-modal__copy">We will email the focused chronicle with the cabin hermit background.</p>
+      <form id="send-form">
+        <label for="send-email">Email</label>
+        <input id="send-email" name="email" type="email" required autocomplete="email" placeholder="you@example.com" />
+        <button class="action-button action-button--solid" type="submit">Send</button>
+      </form>
+      <p class="engagement-status" id="send-status" hidden></p>
+    </div>
+  </div>
+
+  <script src="config.js?v=1.3"></script>
+  <script src="chronicles.js?v=1.3"></script>
+  <script src="script.js?v=1.3"></script>
+  <script src="engagement.js?v=1.4"></script>
 </body>
 </html>

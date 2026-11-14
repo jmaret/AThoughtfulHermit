@@ -157,6 +157,9 @@ function setFocus(index, { animate = true } = {}) {
   focusIndex = index;
   renderFeature(animate);
   renderStrip();
+  if (typeof window.athRefreshReactions === 'function') {
+    window.athRefreshReactions();
+  }
 }
 
 stripPrev.addEventListener('click', () => setFocus(focusIndex - 1));

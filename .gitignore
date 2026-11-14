@@ -3,3 +3,6 @@
 .vscode/
 .idea/
 essays.fragment.html
+.env
+.env.*
+supabase/.temp/
