@@ -4,6 +4,7 @@ import { findChronicle } from '../_shared/chronicles.ts';
 import {
   articleEmailHtml,
   functionsBaseUrl,
+  injectUnsubscribeLink,
   sendResendEmail,
 } from '../_shared/email.ts';
 import {
@@ -79,15 +80,8 @@ Deno.serve(async (req) => {
     if (edition?.email_html) {
       subject = edition.subject || subject;
       html = String(edition.email_html);
-      if (unsubscribeUrl && !html.includes(unsubscribeUrl)) {
-        const unsubBlock =
-          `<p style="margin:18px 0 0;font-size:12px;line-height:1.5;color:#6b4a2e;text-align:center;"><a href="${unsubscribeUrl}" style="color:#6b4a2e;">Unsubscribe</a></p>`;
-        html = html.includes('Unsubscribe link is personalized')
-          ? html.replace(
-              /<p[^>]*>Unsubscribe link is personalized when the weekly send runs\.<\/p>/,
-              unsubBlock
-            )
-          : `${html}${unsubBlock}`;
+      if (unsubscribeUrl) {
+        html = injectUnsubscribeLink(html, unsubscribeUrl);
       }
     } else {
       html = articleEmailHtml({
@@ -95,6 +89,7 @@ Deno.serve(async (req) => {
         title: chronicle.title,
         series: chronicle.series,
         excerpts: chronicle.excerpts,
+        newsletterImage: chronicle.newsletterImage,
         unsubscribeUrl,
       });
     }

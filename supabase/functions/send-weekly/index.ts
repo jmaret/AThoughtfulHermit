@@ -1,6 +1,6 @@
 import { corsHeaders, jsonResponse } from '../_shared/cors.ts';
 import { adminClient } from '../_shared/supabase.ts';
-import { functionsBaseUrl, sendResendEmail } from '../_shared/email.ts';
+import { functionsBaseUrl, injectUnsubscribeLink, sendResendEmail } from '../_shared/email.ts';
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -47,9 +47,7 @@ Deno.serve(async (req) => {
 
     for (const subscriber of list) {
       const unsub = `${functionsBaseUrl()}/unsubscribe?token=${subscriber.unsubscribe_token}`;
-      const html = String(edition.email_html).includes('Unsubscribe')
-        ? edition.email_html
-        : `${edition.email_html}<p style="text-align:center;font-family:Georgia,serif;font-size:12px;"><a href="${unsub}">Unsubscribe</a></p>`;
+      const html = injectUnsubscribeLink(String(edition.email_html), unsub);
 
       const result = await sendResendEmail({
         to: subscriber.email,

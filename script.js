@@ -215,6 +215,7 @@ window.addEventListener('resize', () => {
 function applyDeepLink() {
   const raw = (window.location.hash || '').replace(/^#/, '').trim();
   if (!raw) {
+    closeImageModal();
     return false;
   }
 
@@ -222,6 +223,7 @@ function applyDeepLink() {
   const chronicleId = decodeURIComponent(essayMatch ? essayMatch[1] : raw);
   const index = CHRONICLES.findIndex((item) => item.id === chronicleId);
   if (index < 0) {
+    closeImageModal();
     return false;
   }
 
@@ -229,6 +231,8 @@ function applyDeepLink() {
   if (essayMatch) {
     const piece = CHRONICLES[index];
     openEssay(piece.essayId, piece.title);
+  } else {
+    closeImageModal();
   }
   return true;
 }

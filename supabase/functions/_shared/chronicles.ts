@@ -4,6 +4,7 @@ export type Chronicle = {
   title: string;
   series: string;
   excerpts: string[];
+  newsletterImage?: string;
 };
 
 export const CHRONICLES: Chronicle[] = [
@@ -11,6 +12,7 @@ export const CHRONICLES: Chronicle[] = [
     id: 'friday-the-13th',
     title: 'Friday the 13th: The Shadow We Cast Before Ourselves',
     series: 'Relationship Chronicles 10',
+    newsletterImage: 'images/newsletter_rc_10.jpg',
     // Newsletter body from sources/friday-the-13th.txt
     excerpts: [
       'Hello friends,',
