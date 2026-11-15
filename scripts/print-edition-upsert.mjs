@@ -27,5 +27,8 @@ values (
 on conflict (week_of) do update set
   chronicle_id = excluded.chronicle_id,
   subject = excluded.subject,
-  email_html = excluded.email_html,
-  sent_at = null;`);
+  email_html = excluded.email_html;
+`);
+console.log(
+  '-- sent_at is preserved on conflict; set sent_at = null manually to re-queue a blast.'
+);

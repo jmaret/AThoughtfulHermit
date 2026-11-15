@@ -74,22 +74,52 @@ function wrapCabinEmail(innerCardHtml, preheader = '') {
 </html>`;
 }
 
-function buildArticleHtml(piece) {
-  const excerpts = piece.excerpts
-    .map(
-      (text) =>
-        `<p style="margin:0 0 12px;font-size:16px;line-height:1.6;color:#3a2f28;">${escapeHtml(text)}</p>`
-    )
-    .join('');
+function loadNewsletterSource(chronicleId) {
+  const txtPath = path.join(root, 'sources', `${chronicleId}.txt`);
+  if (!fs.existsSync(txtPath)) {
+    return null;
+  }
+  return fs.readFileSync(txtPath, 'utf8').trim();
+}
+
+function paragraphsFromSource(sourceText) {
+  return sourceText
+    .split(/\n\s*\n/)
+    .map((block) => block.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim())
+    .filter(Boolean);
+}
+
+function buildArticleHtml(piece, sourceText) {
+  const bodyHtml = sourceText
+    ? paragraphsFromSource(sourceText)
+        .map(
+          (text) =>
+            `<p style="margin:0 0 12px;font-size:16px;line-height:1.6;color:#3a2f28;">${escapeHtml(text)}</p>`
+        )
+        .join('')
+    : piece.excerpts
+        .map(
+          (text) =>
+            `<p style="margin:0 0 12px;font-size:16px;line-height:1.6;color:#3a2f28;">${escapeHtml(text)}</p>`
+        )
+        .join('');
+
+  const imageHtml = piece.newsletterImage
+    ? `<p style="margin:0 0 18px;">
+      <img src="${SITE_URL}/${escapeHtml(piece.newsletterImage)}" alt="${escapeHtml(piece.title)}" width="512" style="display:block;width:100%;max-width:512px;height:auto;border:0;border-radius:12px;" />
+    </p>`
+    : '';
 
   const card = `
-    <p style="margin:0 0 8px;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:#6b4a2e;font-weight:bold;">${escapeHtml(piece.series)}</p>
+    <p style="margin:0 0 8px;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:#6b4a2e;font-weight:bold;">${escapeHtml(piece.series)} · Article of the week</p>
     <h1 style="margin:0 0 14px;font-size:26px;line-height:1.25;color:#1c1612;">${escapeHtml(piece.title)}</h1>
-    ${excerpts}
+    ${imageHtml}
+    ${bodyHtml}
     <p style="margin:20px 0 0;">
-      <a href="${SITE_URL}/" style="display:inline-block;background:#3d2a1a;color:#fcf6ec;text-decoration:none;padding:10px 18px;border-radius:999px;font-size:14px;">Read on the site</a>
+      <a href="${SITE_URL}/" style="display:inline-block;background:#3d2a1a;color:#fcf6ec;text-decoration:none;padding:10px 18px;border-radius:999px;font-size:14px;margin:0 8px 8px 0;">Visit AThoughtfulHermit</a>
+      <a href="${SITE_URL}/#essay/${encodeURIComponent(piece.id)}" style="display:inline-block;background:#fcf6ec;color:#3d2a1a;text-decoration:none;padding:10px 18px;border-radius:999px;font-size:14px;border:1px solid #3d2a1a;margin:0 0 8px 0;">Read the full essay</a>
     </p>
-    <p style="margin:18px 0 0;font-size:12px;line-height:1.5;color:#6b4a2e;">Unsubscribe link is personalized when the weekly send runs.</p>
+    <p style="margin:18px 0 0;font-size:12px;line-height:1.5;color:#6b4a2e;">Opt-out link is added when this edition is sent to subscribers.</p>
     <p style="margin:14px 0 0;font-size:12px;color:#6b4a2e;">AThoughtfulHermit · reflective notes for the long walk home</p>
   `;
 
@@ -120,7 +150,8 @@ if (!piece) {
   process.exit(1);
 }
 
-const html = buildArticleHtml(piece);
+const sourceText = loadNewsletterSource(piece.id);
+const html = buildArticleHtml(piece, sourceText);
 const outDir = path.join(root, 'editions');
 fs.mkdirSync(outDir, { recursive: true });
 const outFile = path.join(outDir, `${piece.id}-${weekOf}.html`);
@@ -131,6 +162,11 @@ const seed = {
   week_of: weekOf,
   subject: `Article of the week: ${piece.title}`,
   email_html_path: path.relative(root, outFile),
+  source_pdf: fs.existsSync(path.join(root, 'sources', `${piece.id}.pdf`))
+    ? `sources/${piece.id}.pdf`
+    : null,
+  source_text: sourceText ? `sources/${piece.id}.txt` : null,
+  newsletter_image: piece.newsletterImage || null,
 };
 
 fs.writeFileSync(path.join(outDir, `${piece.id}-${weekOf}.json`), JSON.stringify(seed, null, 2) + '\n');

@@ -53,10 +53,33 @@ export function wrapCabinEmail(innerCardHtml: string, options?: { preheader?: st
 </html>`;
 }
 
+/** Placeholder paragraph built into edition HTML before personalized opt-out links exist. */
+export const UNSUBSCRIBE_PLACEHOLDER =
+  'Opt-out link is added when this edition is sent to subscribers.';
+
+export function injectUnsubscribeLink(html: string, unsubscribeUrl: string): string {
+  if (!unsubscribeUrl || html.includes(unsubscribeUrl)) {
+    return html;
+  }
+
+  const unsubBlock =
+    `<p style="margin:18px 0 0;font-size:12px;line-height:1.5;color:#6b4a2e;text-align:center;"><a href="${escapeHtml(unsubscribeUrl)}" style="color:#6b4a2e;">Unsubscribe</a></p>`;
+
+  const placeholderRe =
+    /<p[^>]*>Opt-out link is added when this edition is sent to subscribers\.<\/p>|<p[^>]*>Unsubscribe link is personalized when the weekly send runs\.<\/p>/;
+  if (placeholderRe.test(html)) {
+    return html.replace(placeholderRe, unsubBlock);
+  }
+
+  return `${html}${unsubBlock}`;
+}
+
 export function articleEmailHtml(piece: {
+  id?: string;
   title: string;
   series: string;
   excerpts: string[];
+  newsletterImage?: string;
   unsubscribeUrl?: string;
 }): string {
   const excerpts = piece.excerpts
@@ -68,13 +91,23 @@ export function articleEmailHtml(piece: {
   const unsub = piece.unsubscribeUrl
     ? `<p style="margin:18px 0 0;font-size:12px;line-height:1.5;color:#6b4a2e;"><a href="${escapeHtml(piece.unsubscribeUrl)}" style="color:#6b4a2e;">Unsubscribe</a></p>`
     : '';
+  const essayHref = piece.id
+    ? `${SITE_URL}/#essay/${encodeURIComponent(piece.id)}`
+    : `${SITE_URL}/`;
+  const imageHtml = piece.newsletterImage
+    ? `<p style="margin:0 0 18px;">
+      <img src="${SITE_URL}/${escapeHtml(piece.newsletterImage)}" alt="${escapeHtml(piece.title)}" width="512" style="display:block;width:100%;max-width:512px;height:auto;border:0;border-radius:12px;" />
+    </p>`
+    : '';
 
   const card = `
-    <p style="margin:0 0 8px;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:#6b4a2e;font-weight:bold;">${escapeHtml(piece.series)}</p>
+    <p style="margin:0 0 8px;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:#6b4a2e;font-weight:bold;">${escapeHtml(piece.series)} · Article of the week</p>
     <h1 style="margin:0 0 14px;font-size:26px;line-height:1.25;color:#1c1612;">${escapeHtml(piece.title)}</h1>
+    ${imageHtml}
     ${excerpts}
     <p style="margin:20px 0 0;">
-      <a href="${SITE_URL}/" style="display:inline-block;background:#3d2a1a;color:#fcf6ec;text-decoration:none;padding:10px 18px;border-radius:999px;font-size:14px;">Read on the site</a>
+      <a href="${SITE_URL}/" style="display:inline-block;background:#3d2a1a;color:#fcf6ec;text-decoration:none;padding:10px 18px;border-radius:999px;font-size:14px;margin:0 8px 8px 0;">Visit AThoughtfulHermit</a>
+      <a href="${essayHref}" style="display:inline-block;background:#fcf6ec;color:#3d2a1a;text-decoration:none;padding:10px 18px;border-radius:999px;font-size:14px;border:1px solid #3d2a1a;margin:0 0 8px 0;">Read the full essay</a>
     </p>
     ${unsub}
     <p style="margin:14px 0 0;font-size:12px;color:#6b4a2e;">AThoughtfulHermit · reflective notes for the long walk home</p>

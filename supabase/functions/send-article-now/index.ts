@@ -4,6 +4,7 @@ import { findChronicle } from '../_shared/chronicles.ts';
 import {
   articleEmailHtml,
   functionsBaseUrl,
+  injectUnsubscribeLink,
   sendResendEmail,
 } from '../_shared/email.ts';
 import {
@@ -14,8 +15,8 @@ import {
 } from '../_shared/rateLimit.ts';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const MAX_PER_EMAIL_HOUR = 3;
-const MAX_PER_IP_HOUR = 10;
+const MAX_PER_EMAIL_HOUR = 10;
+const MAX_PER_IP_HOUR = 30;
 const HOUR_MS = 60 * 60 * 1000;
 
 Deno.serve(async (req) => {
@@ -65,16 +66,37 @@ Deno.serve(async (req) => {
       unsubscribeUrl = `${functionsBaseUrl()}/unsubscribe?token=${subscriber.unsubscribe_token}`;
     }
 
-    const html = articleEmailHtml({
-      title: chronicle.title,
-      series: chronicle.series,
-      excerpts: chronicle.excerpts,
-      unsubscribeUrl,
-    });
+    // Prefer stored weekly edition HTML (PDF newsletter) when available for this chronicle.
+    const { data: edition } = await supabase
+      .from('weekly_editions')
+      .select('subject, email_html')
+      .eq('chronicle_id', chronicle.id)
+      .order('week_of', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    let html: string;
+    let subject = chronicle.title;
+    if (edition?.email_html) {
+      subject = edition.subject || subject;
+      html = String(edition.email_html);
+      if (unsubscribeUrl) {
+        html = injectUnsubscribeLink(html, unsubscribeUrl);
+      }
+    } else {
+      html = articleEmailHtml({
+        id: chronicle.id,
+        title: chronicle.title,
+        series: chronicle.series,
+        excerpts: chronicle.excerpts,
+        newsletterImage: chronicle.newsletterImage,
+        unsubscribeUrl,
+      });
+    }
 
     const sent = await sendResendEmail({
       to: email,
-      subject: chronicle.title,
+      subject,
       html,
     });
     if (sent.error) {

@@ -4,17 +4,45 @@ export type Chronicle = {
   title: string;
   series: string;
   excerpts: string[];
+  newsletterImage?: string;
 };
 
 export const CHRONICLES: Chronicle[] = [
   {
+    id: 'friday-the-13th',
+    title: 'Friday the 13th: The Shadow We Cast Before Ourselves',
+    series: 'Relationship Chronicles 10',
+    newsletterImage: 'images/newsletter_rc_10.jpg',
+    // Newsletter body from sources/friday-the-13th.txt
+    excerpts: [
+      'Hello friends,',
+      'Some fears arrive with obvious causes. A storm gathering on the horizon. A difficult conversation waiting to happen. A genuine uncertainty about the future.',
+      'Other fears are more peculiar. They begin not with reality, but with possibility.',
+      'A date on the calendar. An unanswered message. A postponed meeting. A quiet room. The mind notices a small uncertainty and begins filling the empty space with stories. Before long, we find ourselves responding not to what is happening, but to what might happen.',
+      'Human imagination is one of our greatest gifts. It allows us to plan, prepare, and anticipate. Yet the same faculty that helps us navigate life can sometimes become a remarkably convincing storyteller.',
+      'A shadow appears larger in the dark than it does in the light.',
+      'Many of the worries that occupy our thoughts are not entirely invented. Loss is possible. Mistakes are possible. Rejection is possible. The future remains uncertain. But possibility is not certainty, and uncertainty is not evidence.',
+      'Perhaps wisdom is not learning how to eliminate fear. Perhaps wisdom is learning how to examine it. To ask better questions. To distinguish between what we know and what we imagine. To bring curiosity where we once brought assumption.',
+      'The future will always contain unknowns. The challenge is not to make the unknown disappear. The challenge is to meet it without allowing imagination to quietly rewrite reality.',
+      'A question to sit with this week: What fear in your life becomes smaller when it is examined closely instead of observed from a distance?',
+      'After all, not every shadow conceals a monster. Sometimes it is only a lantern waiting to be understood.',
+      'Until next week, A Thoughtful Hermit',
+    ],
+  },
+  {
     id: 'geography-distance',
     title: 'The Geography of Distance: On Growing Apart Without Letting Go',
     series: 'Relationship Chronicles 9',
+    // Newsletter body from sources/geography-distance.pdf
     excerpts: [
-      'Relationships are often measured in miles, but they are sustained by something far less visible: shared moments, repeated encounters, and the small accumulations of everyday life.',
-      'When distance grows, conversations become less frequent and lives unfold in parallel rather than together. The friendship, once nourished by presence, begins surviving on memory. New habits form. New people arrive. New versions of ourselves emerge.',
-      'Is this a failure of connection or simply the natural evolution of human relationships? And when someone who once occupied a central place in our life gradually drifts toward the horizon, are we losing them, or are we discovering that all relationships have seasons?',
+      'Hello friends,',
+      'Most relationships do not end. They recede. Rarely through conflict. Rarely through a dramatic goodbye. More often through miles, obligations, new routines, and lives that gradually unfold in different directions. A friend moves away. A sibling becomes busy raising a family. A colleague changes jobs. The conversations that once happened daily become monthly, then occasional. Somewhere along the way, we begin to wonder: Are we losing each other?',
+      'Distance creates a peculiar challenge. Relationships are built not only from affection, but from shared reality. The lunch breaks, the spontaneous phone calls, the small frustrations, and the ordinary moments we rarely think about. When those disappear, connection requires intention in place of proximity.',
+      'Yet perhaps growing apart is not always a sign that something has gone wrong. The people we love continue becoming themselves. So do we. The college friend who knew our youthful ambitions carries a version of us that no longer entirely exists. We carry versions of them, too. Time changes us all. The remarkable thing is not that relationships transform, but that they remain meaningful despite the transformation.',
+      "This week's reflection is simple: Not every relationship is meant to remain exactly as it was. Some become quieter. Some become less frequent. Some move from daily presence to cherished memory. That does not erase what was real. A friendship that carried you through an important chapter of life does not become less valuable because the chapter ended. Perhaps maturity is learning to hold relationships with open hands. To appreciate what they were, honor what they became, and make peace with what they can no longer be.",
+      'A question to sit with this week: Are there relationships you have been grieving for what they no longer are, when perhaps they are simply becoming something different?',
+      'After all, every person who truly mattered leaves something behind. And every person who truly mattered takes something with them. Just enough to remind us that, for a little while, our lives were wonderfully intertwined.',
+      'Until next week, A Thoughtful Hermit',
     ],
   },
   {

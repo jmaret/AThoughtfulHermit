@@ -212,5 +212,36 @@ window.addEventListener('resize', () => {
   renderStrip();
 });
 
+function applyDeepLink() {
+  const raw = (window.location.hash || '').replace(/^#/, '').trim();
+  if (!raw) {
+    closeImageModal();
+    return false;
+  }
+
+  const essayMatch = raw.match(/^essay\/(.+)$/i);
+  const chronicleId = decodeURIComponent(essayMatch ? essayMatch[1] : raw);
+  const index = CHRONICLES.findIndex((item) => item.id === chronicleId);
+  if (index < 0) {
+    closeImageModal();
+    return false;
+  }
+
+  setFocus(index, { animate: false });
+  if (essayMatch) {
+    const piece = CHRONICLES[index];
+    openEssay(piece.essayId, piece.title);
+  } else {
+    closeImageModal();
+  }
+  return true;
+}
+
 updateVisibleCount();
-setFocus(0, { animate: false });
+if (!applyDeepLink()) {
+  setFocus(0, { animate: false });
+}
+
+window.addEventListener('hashchange', () => {
+  applyDeepLink();
+});
