@@ -14,8 +14,8 @@ import {
 } from '../_shared/rateLimit.ts';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const MAX_PER_EMAIL_HOUR = 3;
-const MAX_PER_IP_HOUR = 10;
+const MAX_PER_EMAIL_HOUR = 10;
+const MAX_PER_IP_HOUR = 30;
 const HOUR_MS = 60 * 60 * 1000;
 
 Deno.serve(async (req) => {
@@ -65,16 +65,43 @@ Deno.serve(async (req) => {
       unsubscribeUrl = `${functionsBaseUrl()}/unsubscribe?token=${subscriber.unsubscribe_token}`;
     }
 
-    const html = articleEmailHtml({
-      title: chronicle.title,
-      series: chronicle.series,
-      excerpts: chronicle.excerpts,
-      unsubscribeUrl,
-    });
+    // Prefer stored weekly edition HTML (PDF newsletter) when available for this chronicle.
+    const { data: edition } = await supabase
+      .from('weekly_editions')
+      .select('subject, email_html')
+      .eq('chronicle_id', chronicle.id)
+      .order('week_of', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    let html: string;
+    let subject = chronicle.title;
+    if (edition?.email_html) {
+      subject = edition.subject || subject;
+      html = String(edition.email_html);
+      if (unsubscribeUrl && !html.includes(unsubscribeUrl)) {
+        const unsubBlock =
+          `<p style="margin:18px 0 0;font-size:12px;line-height:1.5;color:#6b4a2e;text-align:center;"><a href="${unsubscribeUrl}" style="color:#6b4a2e;">Unsubscribe</a></p>`;
+        html = html.includes('Unsubscribe link is personalized')
+          ? html.replace(
+              /<p[^>]*>Unsubscribe link is personalized when the weekly send runs\.<\/p>/,
+              unsubBlock
+            )
+          : `${html}${unsubBlock}`;
+      }
+    } else {
+      html = articleEmailHtml({
+        id: chronicle.id,
+        title: chronicle.title,
+        series: chronicle.series,
+        excerpts: chronicle.excerpts,
+        unsubscribeUrl,
+      });
+    }
 
     const sent = await sendResendEmail({
       to: email,
-      subject: chronicle.title,
+      subject,
       html,
     });
     if (sent.error) {

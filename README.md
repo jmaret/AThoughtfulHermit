@@ -65,11 +65,11 @@ supabase functions deploy reaction-counts
 Mark exactly one chronicle with `isArticleOfTheWeek: true` in [`chronicles.js`](chronicles.js), then:
 
 ```bash
-node scripts/build-email.mjs geography-distance --week 2026-11-17
-node scripts/print-edition-upsert.mjs editions/geography-distance-2026-11-17.json
+node scripts/build-email.mjs friday-the-13th --week 2026-11-17
+node scripts/print-edition-upsert.mjs editions/friday-the-13th-2026-11-17.json
 ```
 
-Run the printed SQL in Supabase. Emails use the Thoughtful Hermit cabin image as a full background (`images/AThoughtFulHermit.jpg` on Pages) with a parchment content card.
+Optional newsletter copy lives in `sources/<chronicle-id>.txt` (and optional PDF). Optional `newsletterImage` on a chronicle embeds art hosted on Pages. Run the printed SQL in Supabase. Emails use the Thoughtful Hermit cabin image as a full background (`images/AThoughtFulHermit.jpg` on Pages) with a parchment content card. CTAs link to the site and `#essay/<chronicle-id>` to open that essay.
 
 ### 3. Weekly GitHub Action
 
@@ -85,7 +85,7 @@ Workflow: [`.github/workflows/weekly-email.yml`](.github/workflows/weekly-email.
 
 - **Subscribe** uses double opt-in (confirm link).
 - **Unsubscribe** is a one-click token link in emails / function URL.
-- **Send this article now** rate-limits to 3 sends per email per hour.
+- **Send this article now** rate-limits to 10 sends per email per hour.
 - **Likes / dislikes** are anonymous (`localStorage` visitor key); no comments.
 
 ## Repository layout

@@ -1,6 +1,20 @@
 /** Newest first — index 0 is the initial focus. */
 const CHRONICLES = [
   {
+    id: 'friday-the-13th',
+    title: 'Friday the 13th: The Shadow We Cast Before Ourselves',
+    excerpts: [
+      'Few dates carry as much superstition as Friday the 13th.',
+      'For some, it is a harmless curiosity. For others, it symbolizes bad luck, misfortune, and the lurking possibility that something might go wrong. Yet the real power of Friday the 13th has never resided in the date itself. It exists in the stories we tell about it.',
+    ],
+    series: 'Relationship Chronicles 10',
+    essayId: 'essay-friday-the-13th',
+    cartoonSrc: 'images/cartoon_rc_10.png',
+    newsletterImage: 'images/newsletter_rc_10.jpg',
+    accent: '#4a3d48',
+    isArticleOfTheWeek: true,
+  },
+  {
     id: 'geography-distance',
     title: 'The Geography of Distance: On Growing Apart Without Letting Go',
     excerpts: [
@@ -12,7 +26,6 @@ const CHRONICLES = [
     essayId: 'essay-geography-distance',
     cartoonSrc: 'images/cartoon_rc_09.png',
     accent: '#3d6b8c',
-    isArticleOfTheWeek: true,
   },
   {
     id: 'peaks-valleys',
