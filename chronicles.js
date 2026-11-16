@@ -104,6 +104,7 @@ const CHRONICLES = [
     series: 'Relationship Chronicles 3',
     essayId: 'essay-unsent-draft',
     cartoonSrc: 'images/cartoon_rc_03.png',
+    newsletterImage: 'images/newsletter_rc_03.jpg',
     accent: '#7a4a5c',
   },
   {
