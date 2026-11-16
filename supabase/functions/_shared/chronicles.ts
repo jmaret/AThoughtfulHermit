@@ -33,6 +33,7 @@ export const CHRONICLES: Chronicle[] = [
     id: 'geography-distance',
     title: 'The Geography of Distance: On Growing Apart Without Letting Go',
     series: 'Relationship Chronicles 9',
+    newsletterImage: 'images/newsletter_rc_09.jpg',
     // Newsletter body from sources/geography-distance.pdf
     excerpts: [
       'Hello friends,',

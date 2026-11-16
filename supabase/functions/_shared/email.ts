@@ -101,7 +101,7 @@ export function articleEmailHtml(piece: {
     : '';
 
   const card = `
-    <p style="margin:0 0 8px;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:#6b4a2e;font-weight:bold;">${escapeHtml(piece.series)} · Article of the week</p>
+    <p style="margin:0 0 8px;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:#6b4a2e;font-weight:bold;">${escapeHtml(piece.series)}</p>
     <h1 style="margin:0 0 14px;font-size:26px;line-height:1.25;color:#1c1612;">${escapeHtml(piece.title)}</h1>
     ${imageHtml}
     ${excerpts}

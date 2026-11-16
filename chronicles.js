@@ -25,6 +25,7 @@ const CHRONICLES = [
     series: 'Relationship Chronicles 9',
     essayId: 'essay-geography-distance',
     cartoonSrc: 'images/cartoon_rc_09.png',
+    newsletterImage: 'images/newsletter_rc_09.jpg',
     accent: '#3d6b8c',
   },
   {
