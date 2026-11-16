@@ -188,6 +188,18 @@ imageModal.querySelectorAll('[data-modal-close]').forEach((element) => {
   element.addEventListener('click', closeImageModal);
 });
 
+document.addEventListener('contextmenu', (event) => {
+  if (event.target.closest('img')) {
+    event.preventDefault();
+  }
+});
+
+document.addEventListener('dragstart', (event) => {
+  if (event.target.closest('img')) {
+    event.preventDefault();
+  }
+});
+
 document.addEventListener('keydown', (event) => {
   if (event.key === 'Escape' && !imageModal.hidden) {
     closeImageModal();

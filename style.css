@@ -49,6 +49,16 @@ body {
 img {
   max-width: 100%;
   display: block;
+  -webkit-user-drag: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Light deterrent only — publicly displayed images can still be saved. */
+.image-modal__image,
+.panel-logo,
+.author-portrait {
+  pointer-events: none;
 }
 
 button {
