@@ -116,6 +116,7 @@ const CHRONICLES = [
     series: 'Relationship Chronicles 2',
     essayId: 'essay-two-clocks',
     cartoonSrc: 'images/cartoon_rc_02.png',
+    newsletterImage: 'images/newsletter_rc_02.jpg',
     accent: '#4a6a8a',
   },
   {
