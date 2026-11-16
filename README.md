@@ -69,6 +69,13 @@ node scripts/build-email.mjs friday-the-13th --week 2026-11-17
 node scripts/print-edition-upsert.mjs editions/friday-the-13th-2026-11-17.json
 ```
 
+For an archival / send-now-only edition (not the weekly blast), use a different `--week` and mark it sent so cron skips it:
+
+```bash
+node scripts/build-email.mjs geography-distance --week 2026-11-10
+node scripts/print-edition-upsert.mjs editions/geography-distance-2026-11-10.json --mark-sent
+```
+
 Optional newsletter copy lives in `sources/<chronicle-id>.txt` (and optional PDF). Optional `newsletterImage` on a chronicle embeds art hosted on Pages. Run the printed SQL in Supabase. Emails use the Thoughtful Hermit cabin image as a full background (`images/AThoughtFulHermit.jpg` on Pages) with a parchment content card. CTAs link to the site and `#essay/<chronicle-id>` to open that essay.
 
 ### 3. Weekly GitHub Action
