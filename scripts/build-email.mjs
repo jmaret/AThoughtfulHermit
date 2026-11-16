@@ -164,7 +164,9 @@ fs.writeFileSync(outFile, html);
 const seed = {
   chronicle_id: piece.id,
   week_of: weekOf,
-  subject: `Article of the week: ${piece.title}`,
+  subject: piece.isArticleOfTheWeek
+    ? `Article of the week: ${piece.title}`
+    : piece.title,
   email_html_path: path.relative(root, outFile),
   source_pdf: fs.existsSync(path.join(root, 'sources', `${piece.id}.pdf`))
     ? `sources/${piece.id}.pdf`
