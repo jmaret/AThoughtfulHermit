@@ -3,8 +3,9 @@
  * Builds a cabin-background email HTML file for a chronicle.
  *
  * Usage:
- *   node scripts/build-email.mjs geography-distance
- *   node scripts/build-email.mjs geography-distance --week 2026-11-17
+ *   node scripts/build-email.mjs friday-the-13th
+ *   node scripts/build-email.mjs friday-the-13th --week 2026-11-17
+ *   node scripts/build-email.mjs geography-distance --week 2026-11-10
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -110,8 +111,12 @@ function buildArticleHtml(piece, sourceText) {
     </p>`
     : '';
 
+  const eyebrow = piece.isArticleOfTheWeek
+    ? `${escapeHtml(piece.series)} · Article of the week`
+    : escapeHtml(piece.series);
+
   const card = `
-    <p style="margin:0 0 8px;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:#6b4a2e;font-weight:bold;">${escapeHtml(piece.series)} · Article of the week</p>
+    <p style="margin:0 0 8px;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:#6b4a2e;font-weight:bold;">${eyebrow}</p>
     <h1 style="margin:0 0 14px;font-size:26px;line-height:1.25;color:#1c1612;">${escapeHtml(piece.title)}</h1>
     ${imageHtml}
     ${bodyHtml}
@@ -160,7 +165,9 @@ fs.writeFileSync(outFile, html);
 const seed = {
   chronicle_id: piece.id,
   week_of: weekOf,
-  subject: `Article of the week: ${piece.title}`,
+  subject: piece.isArticleOfTheWeek
+    ? `Article of the week: ${piece.title}`
+    : piece.title,
   email_html_path: path.relative(root, outFile),
   source_pdf: fs.existsSync(path.join(root, 'sources', `${piece.id}.pdf`))
     ? `sources/${piece.id}.pdf`
