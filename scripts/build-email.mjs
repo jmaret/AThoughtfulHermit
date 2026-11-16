@@ -13,7 +13,7 @@ import vm from 'node:vm';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
-const SITE_URL = process.env.SITE_URL || 'https://jmaret.github.io/AThoughtfulHermit';
+const SITE_URL = process.env.SITE_URL || 'https://athoughtfulhermit.com';
 const BG_URL = `${SITE_URL}/images/AThoughtFulHermit.jpg`;
 const LOGO_URL = `${SITE_URL}/images/TransparentMasterLogo.png`;
 
