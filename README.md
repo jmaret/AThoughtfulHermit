@@ -2,7 +2,7 @@
 
 A static site for reflective thoughts and ideas—chronicles on closeness, time, and becoming—presented as a full-page featured piece driven by a rolling strip of all entries.
 
-Live site: [https://jmaret.github.io/AThoughtfulHermit/](https://jmaret.github.io/AThoughtfulHermit/)
+Live site: [https://athoughtfulhermit.com/](https://athoughtfulhermit.com/)
 
 ## Local preview
 
@@ -40,7 +40,7 @@ No AWS. Browser stays on GitHub Pages; secrets live in Supabase + GitHub Actions
 supabase secrets set \
   RESEND_API_KEY=re_xxx \
   RESEND_FROM="AThoughtfulHermit <onboarding@resend.dev>" \
-  SITE_URL=https://jmaret.github.io/AThoughtfulHermit \
+  SITE_URL=https://athoughtfulhermit.com \
   CRON_SECRET=long-random-string
 ```
 

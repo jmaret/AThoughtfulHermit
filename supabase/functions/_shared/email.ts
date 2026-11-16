@@ -1,4 +1,4 @@
-const SITE_URL = Deno.env.get('SITE_URL') ?? 'https://jmaret.github.io/AThoughtfulHermit';
+const SITE_URL = Deno.env.get('SITE_URL') ?? 'https://athoughtfulhermit.com';
 const BG_URL = `${SITE_URL}/images/AThoughtFulHermit.jpg`;
 const LOGO_URL = `${SITE_URL}/images/TransparentMasterLogo.png`;
 const FROM_EMAIL = Deno.env.get('RESEND_FROM') ?? 'AThoughtfulHermit <onboarding@resend.dev>';

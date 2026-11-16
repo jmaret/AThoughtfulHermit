@@ -1,6 +1,6 @@
 /** Public free-tier config. Fill Supabase values after project creation. */
 const ATH_CONFIG = {
-  siteUrl: 'https://jmaret.github.io/AThoughtfulHermit',
+  siteUrl: 'https://athoughtfulhermit.com',
   /** e.g. https://xxxx.supabase.co */
   supabaseUrl: 'https://fcfeesigrxqpbvlgqguh.supabase.co',
   /** anon / public key only — never the service role key */
