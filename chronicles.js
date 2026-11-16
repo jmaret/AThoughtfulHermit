@@ -128,6 +128,7 @@ const CHRONICLES = [
     series: 'Relationship Chronicles 1',
     essayId: 'essay-soft-inventory',
     cartoonSrc: 'images/cartoon_rc_01.png',
+    newsletterImage: 'images/newsletter_rc_01.jpg',
     accent: '#8a6b3d',
   },
 ];
