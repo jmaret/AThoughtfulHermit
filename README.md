@@ -74,6 +74,9 @@ For an archival / send-now-only edition (not the weekly blast), use a different 
 ```bash
 node scripts/build-email.mjs geography-distance --week 2026-11-10
 node scripts/print-edition-upsert.mjs editions/geography-distance-2026-11-10.json --mark-sent
+
+node scripts/build-email.mjs unsent-draft --week 2026-11-03
+node scripts/print-edition-upsert.mjs editions/unsent-draft-2026-11-03.json --mark-sent
 ```
 
 Optional newsletter copy lives in `sources/<chronicle-id>.txt` (and optional PDF). Optional `newsletterImage` on a chronicle embeds art hosted on Pages. Run the printed SQL in Supabase. Emails use the Thoughtful Hermit cabin image as a full background (`images/AThoughtFulHermit.jpg` on Pages) with a parchment content card. CTAs link to the site and `#essay/<chronicle-id>` to open that essay.
