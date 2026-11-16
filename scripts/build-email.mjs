@@ -3,8 +3,9 @@
  * Builds a cabin-background email HTML file for a chronicle.
  *
  * Usage:
- *   node scripts/build-email.mjs geography-distance
- *   node scripts/build-email.mjs geography-distance --week 2026-11-17
+ *   node scripts/build-email.mjs friday-the-13th
+ *   node scripts/build-email.mjs friday-the-13th --week 2026-11-17
+ *   node scripts/build-email.mjs geography-distance --week 2026-11-10
  */
 import fs from 'node:fs';
 import path from 'node:path';
