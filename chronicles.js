@@ -40,6 +40,7 @@ const CHRONICLES = [
     series: 'Relationship Chronicles 8',
     essayId: 'essay-peaks-valleys',
     cartoonSrc: 'images/cartoon_rc_08.png',
+    newsletterImage: 'images/newsletter_rc_08.jpg',
     accent: '#6b5a3e',
   },
   {

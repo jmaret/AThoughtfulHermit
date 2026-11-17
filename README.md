@@ -83,6 +83,9 @@ node scripts/print-edition-upsert.mjs editions/two-clocks-2026-10-27.json --mark
 
 node scripts/build-email.mjs soft-inventory --week 2026-10-20
 node scripts/print-edition-upsert.mjs editions/soft-inventory-2026-10-20.json --mark-sent
+
+node scripts/build-email.mjs peaks-valleys --week 2026-10-13
+node scripts/print-edition-upsert.mjs editions/peaks-valleys-2026-10-13.json --mark-sent
 ```
 
 Optional newsletter copy lives in `sources/<chronicle-id>.txt` (and optional PDF). Optional `newsletterImage` on a chronicle embeds art hosted on Pages. Run the printed SQL in Supabase. Emails use the Thoughtful Hermit cabin image as a full background (`images/AThoughtFulHermit.jpg` on Pages) with a parchment content card. CTAs link to the site and `#essay/<chronicle-id>` to open that essay.
