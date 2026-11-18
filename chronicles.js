@@ -55,6 +55,7 @@ const CHRONICLES = [
     series: 'Relationship Chronicles 7',
     essayId: 'essay-tomorrow-tax',
     cartoonSrc: 'images/cartoon_rc_07.png',
+    newsletterImage: 'images/newsletter_rc_07.jpg',
     accent: '#8a5a2b',
   },
   {
