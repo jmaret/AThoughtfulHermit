@@ -2,6 +2,12 @@ import { corsHeaders, htmlResponse, jsonResponse } from '../_shared/cors.ts';
 import { adminClient } from '../_shared/supabase.ts';
 import { escapeHtml, siteUrl } from '../_shared/email.ts';
 
+function wantsJson(req: Request, url: URL): boolean {
+  if (url.searchParams.get('format') === 'json') return true;
+  const accept = req.headers.get('accept') || '';
+  return accept.includes('application/json') && !accept.includes('text/html');
+}
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
@@ -31,19 +37,15 @@ Deno.serve(async (req) => {
       return htmlResponse('<h1>Invalid unsubscribe link</h1>', 404);
     }
 
-    if (req.headers.get('accept')?.includes('application/json')) {
+    if (wantsJson(req, url)) {
       return jsonResponse({ ok: true });
     }
 
     const redirect = `${siteUrl()}/?unsubscribed=1`;
-    return htmlResponse(`<!DOCTYPE html>
-<html><head><meta charset="utf-8" /><meta http-equiv="refresh" content="0;url=${escapeHtml(redirect)}" />
-<title>Unsubscribed</title></head>
-<body style="font-family:Georgia,serif;background:#1c1612;color:#fcf6ec;padding:40px;text-align:center;">
-  <h1>You are unsubscribed</h1>
-  <p>No more weekly emails will be sent to this address.</p>
-  <p><a href="${escapeHtml(redirect)}" style="color:#d4a04a;">Return to AThoughtfulHermit</a></p>
-</body></html>`);
+    return new Response(null, {
+      status: 303,
+      headers: { ...corsHeaders, Location: redirect },
+    });
   } catch (error) {
     const message = escapeHtml(error instanceof Error ? error.message : 'Error');
     return htmlResponse(`<h1>Unsubscribe failed</h1><p>${message}</p>`, 500);
