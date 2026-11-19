@@ -84,6 +84,7 @@ const CHRONICLES = [
     series: 'Relationship Chronicles 5',
     essayId: 'essay-elastic-hour',
     cartoonSrc: 'images/cartoon_rc_05.png',
+    newsletterImage: 'images/newsletter_rc_05.jpg',
     accent: '#2f5f6f',
   },
   {
