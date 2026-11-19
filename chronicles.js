@@ -97,6 +97,7 @@ const CHRONICLES = [
     series: 'Relationship Chronicles 4',
     essayId: 'essay-borrowed-constellations',
     cartoonSrc: 'images/cartoon_rc_04.png',
+    newsletterImage: 'images/newsletter_rc_04.jpg',
     accent: '#5c4a7a',
   },
   {
