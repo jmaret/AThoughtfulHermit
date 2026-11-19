@@ -10,6 +10,7 @@ const CHRONICLES = [
     ],
     series: 'Relationship Chronicles 11',
     essayId: 'essay-comfortable-cage',
+    poemId: 'poem-comfortable-cage',
     cartoonSrc: 'images/cartoon_rc_11.png',
     newsletterImage: 'images/newsletter_rc_11.jpg',
     accent: '#6b4a2e',

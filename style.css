@@ -608,6 +608,23 @@ button {
   margin-bottom: 0;
 }
 
+.poem .essay__title {
+  font-style: italic;
+}
+
+.poem__stanza {
+  margin-bottom: 1.5rem;
+}
+
+.poem__stanza p {
+  margin: 0 0 0.2rem;
+  line-height: 1.55;
+}
+
+.poem__stanza p:last-child {
+  margin-bottom: 0;
+}
+
 @keyframes riseIn {
   from {
     opacity: 0;
