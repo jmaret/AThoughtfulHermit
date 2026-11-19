@@ -8,6 +8,7 @@ const featureSeries = document.getElementById('feature-series');
 const featureTitle = document.getElementById('feature-title');
 const featureExcerpts = document.getElementById('feature-excerpts');
 const featureEssayBtn = document.getElementById('feature-essay');
+const featurePoemBtn = document.getElementById('feature-poem');
 const featureCartoonBtn = document.getElementById('feature-cartoon');
 const stripTrack = document.getElementById('strip-track');
 const stripPrev = document.getElementById('strip-prev');
@@ -101,6 +102,15 @@ function renderFeature(animate = true) {
 
   featureEssayBtn.dataset.essayId = piece.essayId;
   featureEssayBtn.setAttribute('aria-label', `Open essay: ${piece.title}`);
+  if (piece.poemId) {
+    featurePoemBtn.hidden = false;
+    featurePoemBtn.dataset.poemId = piece.poemId;
+    featurePoemBtn.setAttribute('aria-label', `Open poem: ${piece.title}`);
+  } else {
+    featurePoemBtn.hidden = true;
+    delete featurePoemBtn.dataset.poemId;
+    featurePoemBtn.removeAttribute('aria-label');
+  }
   featureCartoonBtn.dataset.cartoonSrc = piece.cartoonSrc;
   featureCartoonBtn.dataset.cartoonTitle = piece.title;
   featureCartoonBtn.setAttribute('aria-label', `View cartoon for ${piece.title}`);
@@ -179,6 +189,14 @@ featureEssayBtn.addEventListener('click', () => {
   openEssay(piece.essayId, piece.title);
 });
 
+featurePoemBtn.addEventListener('click', () => {
+  const piece = CHRONICLES[focusIndex];
+  if (!piece?.poemId) {
+    return;
+  }
+  openEssay(piece.poemId, `Poem: ${piece.title}`);
+});
+
 featureCartoonBtn.addEventListener('click', () => {
   const piece = CHRONICLES[focusIndex];
   openCartoonLightbox({ title: piece.title, src: piece.cartoonSrc });
@@ -232,7 +250,10 @@ function applyDeepLink() {
   }
 
   const essayMatch = raw.match(/^essay\/(.+)$/i);
-  const chronicleId = decodeURIComponent(essayMatch ? essayMatch[1] : raw);
+  const poemMatch = raw.match(/^poem\/(.+)$/i);
+  const chronicleId = decodeURIComponent(
+    essayMatch ? essayMatch[1] : poemMatch ? poemMatch[1] : raw
+  );
   const index = CHRONICLES.findIndex((item) => item.id === chronicleId);
   if (index < 0) {
     closeImageModal();
@@ -240,9 +261,11 @@ function applyDeepLink() {
   }
 
   setFocus(index, { animate: false });
+  const piece = CHRONICLES[index];
   if (essayMatch) {
-    const piece = CHRONICLES[index];
     openEssay(piece.essayId, piece.title);
+  } else if (poemMatch && piece.poemId) {
+    openEssay(piece.poemId, `Poem: ${piece.title}`);
   } else {
     closeImageModal();
   }
