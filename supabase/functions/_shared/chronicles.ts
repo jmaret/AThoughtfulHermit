@@ -9,6 +9,25 @@ export type Chronicle = {
 
 export const CHRONICLES: Chronicle[] = [
   {
+    id: 'comfortable-cage',
+    title: 'The Comfortable Cage and the Courage to Become',
+    series: 'Relationship Chronicles 11',
+    newsletterImage: 'images/newsletter_rc_11.jpg',
+    // Newsletter body from sources/comfortable-cage.txt
+    excerpts: [
+      'Hello friends,',
+      "Many of the barriers we face are not walls placed before us by the world. They are stories we quietly repeat to ourselves. I'm not ready. Maybe later. What if I fail? What we call excuses often sound remarkably reasonable. Yet beneath them is frequently something deeper: the comfort of the familiar and the fear of what we cannot predict.",
+      'Human beings are creatures of habit. Over time, our routines become identities, and our identities become comfortable places to live, even when they no longer help us grow. The familiar can feel safer than possibility. We remain where we are not always because we are unable to move forward, but because uncertainty asks us to leave behind what we already know.',
+      'The irony is that growth rarely demands a dramatic leap. It asks only for the next step. The habits that shaped our lives were built gradually, one day at a time. Change follows the same path. A conversation. A decision. A new attempt. A small act of courage repeated often enough eventually becomes transformation.',
+      'Of course, the journey is rarely linear. We move forward. We stumble. We regain our footing. We learn. The path of growth often looks like two steps forward and one step back. Yet setbacks do not erase progress. More often than not, they become the very lessons that help us continue climbing.',
+      'No one makes that journey alone. We need people who will encourage us when our confidence fades and challenge us when our excuses begin to masquerade as wisdom. The most valuable companions are not those who always agree with us, but those who care enough to tell us the truth while continuing to walk beside us.',
+      'Perhaps the unknown is not the enemy we imagine it to be. Perhaps it is simply the place where new possibilities wait to be discovered. Every meaningful chapter of life begins there.',
+      'A question to sit with this week: What small step have you been postponing because fear called itself wisdom?',
+      'After all, life is not a destination to be reached. It is a journey to be savored, one imperfect step at a time.',
+      'Until next week, A Thoughtful Hermit',
+    ],
+  },
+  {
     id: 'friday-the-13th',
     title: 'Friday the 13th: The Shadow We Cast Before Ourselves',
     series: 'Relationship Chronicles 10',

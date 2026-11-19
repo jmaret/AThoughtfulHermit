@@ -1,6 +1,21 @@
 /** Newest first — index 0 is the initial focus. */
 const CHRONICLES = [
   {
+    id: 'comfortable-cage',
+    title: 'The Comfortable Cage and the Courage to Become',
+    excerpts: [
+      'Many of the limitations we face are not created by circumstance, but by the stories we tell ourselves to avoid the discomfort of change.',
+      'Excuses often emerge from the inertia of familiar habits and the fear of the unknown, keeping us anchored to what is comfortable even when it no longer serves us.',
+      'Yet meaningful growth rarely arrives through dramatic transformation. It unfolds gradually, one choice and one step at a time, with progress often taking the form of two steps forward and one step back.',
+    ],
+    series: 'Relationship Chronicles 11',
+    essayId: 'essay-comfortable-cage',
+    cartoonSrc: 'images/cartoon_rc_11.png',
+    newsletterImage: 'images/newsletter_rc_11.jpg',
+    accent: '#6b4a2e',
+    isArticleOfTheWeek: true,
+  },
+  {
     id: 'friday-the-13th',
     title: 'Friday the 13th: The Shadow We Cast Before Ourselves',
     excerpts: [
@@ -12,7 +27,6 @@ const CHRONICLES = [
     cartoonSrc: 'images/cartoon_rc_10.png',
     newsletterImage: 'images/newsletter_rc_10.jpg',
     accent: '#4a3d48',
-    isArticleOfTheWeek: true,
   },
   {
     id: 'geography-distance',

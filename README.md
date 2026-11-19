@@ -65,13 +65,16 @@ supabase functions deploy reaction-counts
 Mark exactly one chronicle with `isArticleOfTheWeek: true` in [`chronicles.js`](chronicles.js), then:
 
 ```bash
-node scripts/build-email.mjs friday-the-13th --week 2026-11-17
-node scripts/print-edition-upsert.mjs editions/friday-the-13th-2026-11-17.json
+node scripts/build-email.mjs comfortable-cage --week 2026-11-24
+node scripts/print-edition-upsert.mjs editions/comfortable-cage-2026-11-24.json
 ```
 
 For an archival / send-now-only edition (not the weekly blast), use a different `--week` and mark it sent so cron skips it:
 
 ```bash
+node scripts/build-email.mjs friday-the-13th --week 2026-11-17
+node scripts/print-edition-upsert.mjs editions/friday-the-13th-2026-11-17.json --mark-sent
+
 node scripts/build-email.mjs geography-distance --week 2026-11-10
 node scripts/print-edition-upsert.mjs editions/geography-distance-2026-11-10.json --mark-sent
 
