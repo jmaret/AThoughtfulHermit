@@ -95,6 +95,9 @@ node scripts/print-edition-upsert.mjs editions/mountain-pebbles-2026-09-29.json 
 
 node scripts/build-email.mjs elastic-hour --week 2026-09-22
 node scripts/print-edition-upsert.mjs editions/elastic-hour-2026-09-22.json --mark-sent
+
+node scripts/build-email.mjs borrowed-constellations --week 2026-09-15
+node scripts/print-edition-upsert.mjs editions/borrowed-constellations-2026-09-15.json --mark-sent
 ```
 
 Optional newsletter copy lives in `sources/<chronicle-id>.txt` (and optional PDF). Optional `newsletterImage` on a chronicle embeds art hosted on Pages. Run the printed SQL in Supabase. Emails use the Thoughtful Hermit cabin image as a full background (`images/AThoughtFulHermit.jpg` on Pages) with a parchment content card. CTAs link to the site and `#essay/<chronicle-id>` to open that essay.
