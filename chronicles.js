@@ -70,6 +70,7 @@ const CHRONICLES = [
     series: 'Relationship Chronicles 6',
     essayId: 'essay-mountain-pebbles',
     cartoonSrc: 'images/cartoon_rc_06.png',
+    newsletterImage: 'images/newsletter_rc_06.jpg',
     accent: '#4a6b4a',
   },
   {
